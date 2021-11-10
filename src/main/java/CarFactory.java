@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CarFactory {
@@ -15,12 +16,12 @@ public class CarFactory {
     /*public Car createNewCar(String model, String color, String engineType, Integer numberOfPassengers, Integer enginePower) {
         return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model, color, engineType, numberOfPassengers, enginePower);
     }*/
-    public Car createNewCar(String modelAsText, String color) {
+    public Car createNewCar(String modelAsText, String color, List<String> listOfEquipment ) {
         Model model = models.get(modelAsText);
         if (model == null) {
             throw new RuntimeException("Unknown model " + model);
         }
-        return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model.getModel(), color, model.getEngineType(), model.getNumberOfPassenger(), model.getEnginePower());
+        return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model.getModel(), color, model.getEngineType(), model.getNumberOfPassenger(), model.getEnginePower(), listOfEquipment);
     }
 
     public String getBrand() {

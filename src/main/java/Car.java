@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Car {
     private String brand;
     private String regNo;
@@ -6,6 +8,7 @@ public class Car {
     private String engineType;
     private int numberOfPassengers;
     private int enginePower;
+    private List<String> listOfEquipment;
 
     public Car(String brand,
                String regNo,
@@ -13,7 +16,8 @@ public class Car {
                String color,
                String engineType,
                int numberOfPassengers,
-               int enginePower) {
+               int enginePower,
+              List<String> listOfEquipment) {
 
         this.brand = brand;
         this.regNo = regNo;
@@ -22,6 +26,7 @@ public class Car {
         this.engineType = engineType;
         this.numberOfPassengers = numberOfPassengers;
         this.enginePower = enginePower;
+        this.listOfEquipment = listOfEquipment;
 
     }
 
@@ -79,5 +84,13 @@ public class Car {
 
     public void setEnginePower(int enginePower) {
         this.enginePower = enginePower;
+    }
+
+    public List<String> getListOfEquipment() {
+        return listOfEquipment;
+    }
+
+    public void setListOfEquipment(List<String> listOfEquipment) {
+        this.listOfEquipment = listOfEquipment;
     }
 }

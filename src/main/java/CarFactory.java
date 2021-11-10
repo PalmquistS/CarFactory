@@ -16,12 +16,20 @@ public class CarFactory {
     /*public Car createNewCar(String model, String color, String engineType, Integer numberOfPassengers, Integer enginePower) {
         return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model, color, engineType, numberOfPassengers, enginePower);
     }*/
-    public Car createNewCar(String modelAsText, String color, List<String> listOfEquipment ) {
+    public Car createNewCar(String modelAsText, String color, List<String> listOfExtraEquipment) {
         Model model = models.get(modelAsText);
         if (model == null) {
             throw new RuntimeException("Unknown model " + model);
         }
-        return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model.getModel(), color, model.getEngineType(), model.getNumberOfPassenger(), model.getEnginePower(), listOfEquipment);
+        return new Car(getBrand(),
+                vehicleRegistrationNumberGenerator.getNextRegNo(),
+                model.getModel(),
+                color,
+                model.getEngineType(),
+                model.getNumberOfPassenger(),
+                model.getEnginePower(),
+                model.getListOfStandardEquipment(),
+                listOfExtraEquipment);
     }
 
     public String getBrand() {
@@ -32,8 +40,8 @@ public class CarFactory {
         this.brand = brand;
     }
 
-    public void addModel(String model, String engineType, int enginePower, int numberOfPassenger) {
-        models.put(model, new Model(model, engineType, enginePower, numberOfPassenger));
+    public void addModel(String model, String engineType, int enginePower, int numberOfPassenger, List<String> listOfStandardEquipment) {
+        models.put(model, new Model(model, engineType, enginePower, numberOfPassenger, listOfStandardEquipment));
     }
 
     public static class Model {
@@ -41,12 +49,14 @@ public class CarFactory {
         String engineType;
         int enginePower;
         int numberOfPassenger;
+      List<String> listOfStandardEquipment;
 
-        public Model(String model, String engineType, int enginePower, int numberOfPassenger) {
+        public Model(String model, String engineType, int enginePower, int numberOfPassenger, List<String> listOfStandardEquipment) {
             this.model = model;
             this.engineType = engineType;
             this.enginePower = enginePower;
             this.numberOfPassenger = numberOfPassenger;
+            this.listOfStandardEquipment = listOfStandardEquipment;
         }
 
         public String getModel() {
@@ -68,6 +78,8 @@ public class CarFactory {
             return numberOfPassenger;
         }
 
-
+        public List<String> getListOfStandardEquipment() {
+            return listOfStandardEquipment;
+        }
     }
 }

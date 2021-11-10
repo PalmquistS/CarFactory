@@ -8,7 +8,8 @@ public class Car {
     private String engineType;
     private int numberOfPassengers;
     private int enginePower;
-    private List<String> listOfEquipment;
+    private List<String> listOfStandardEquipment;
+    private List<String> listOfExtraEquipment;
 
     public Car(String brand,
                String regNo,
@@ -17,7 +18,8 @@ public class Car {
                String engineType,
                int numberOfPassengers,
                int enginePower,
-              List<String> listOfEquipment) {
+              List<String> listOfStandardEquipment,
+              List<String> listOfExtraEquipment) {
 
         this.brand = brand;
         this.regNo = regNo;
@@ -26,7 +28,8 @@ public class Car {
         this.engineType = engineType;
         this.numberOfPassengers = numberOfPassengers;
         this.enginePower = enginePower;
-        this.listOfEquipment = listOfEquipment;
+        this.listOfStandardEquipment = listOfStandardEquipment;
+        this.listOfExtraEquipment = listOfExtraEquipment;
 
     }
 
@@ -86,11 +89,19 @@ public class Car {
         this.enginePower = enginePower;
     }
 
-    public List<String> getListOfEquipment() {
-        return listOfEquipment;
+    public List<String> getListOfExtraEquipment() {
+        return listOfExtraEquipment;
     }
 
-    public void setListOfEquipment(List<String> listOfEquipment) {
-        this.listOfEquipment = listOfEquipment;
+    public void setListOfExtraEquipment(List<String> listOfExtraEquipment) {
+        this.listOfExtraEquipment = listOfExtraEquipment;
+    }
+
+    public List<String> getListOfStandardEquipment() {
+        return listOfStandardEquipment;
+    }
+
+    public void setListOfStandardEquipment(List<String> listOfStandardEquipment) {
+        this.listOfStandardEquipment = listOfStandardEquipment;
     }
 }

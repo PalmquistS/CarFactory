@@ -15,7 +15,7 @@ public class CarFactoryTest {
     void setUp() {
         VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator = new VehicleRegistrationNumberGenerator(List.of("ABC123"));
         carFactory = new CarFactory(vehicleRegistrationNumberGenerator, "Saab");
-        carFactory.addModel("900", "Bensin", 90, 4);
+        carFactory.addModel("900", "Bensin", 90, 4, List.of("Rattvärme, Stolsvärme, Krockkudde"));
     }
 
     @Test
@@ -76,10 +76,17 @@ public class CarFactoryTest {
 
     @Test
     void test_add_list_of_equipment_to_the_car_success() {
-
         Car car = carFactory.createNewCar("900", "red", List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak"));
 
-        assertEquals(List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak"), car.getListOfEquipment());
+        assertNotNull(car);
+        assertEquals(List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak"), car.getListOfExtraEquipment());
+    }
 
+    @Test
+    void test_check_model_specific_equipment_success() {
+        Car car = carFactory.createNewCar("900", "red", List.of(""));
+
+        assertNotNull(car);
+        assertEquals(List.of("Rattvärme, Stolsvärme, Krockkudde"), car.getListOfStandardEquipment());
     }
 }

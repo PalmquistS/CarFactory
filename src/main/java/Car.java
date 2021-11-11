@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Car {
@@ -9,7 +8,8 @@ public class Car {
     private String engineType;
     private int numberOfPassengers;
     private int enginePower;
-    private List<String> listCarTotalEquipment;
+    private List<String> listEquipment;
+    private List<String> listEquipmentPackages;
 
 
     public Car(String brand,
@@ -19,7 +19,9 @@ public class Car {
                String engineType,
                int numberOfPassengers,
                int enginePower,
-               List<String> listCarTotalEquipment) {
+               List<String> listEquipmentPackages,
+               List<String> listEquipment
+               ) {
 
 
         this.brand = brand;
@@ -29,8 +31,9 @@ public class Car {
         this.engineType = engineType;
         this.numberOfPassengers = numberOfPassengers;
         this.enginePower = enginePower;
-        this.listCarTotalEquipment = listCarTotalEquipment;
+        this.listEquipment = listEquipment;
 
+        this.listEquipmentPackages = listEquipmentPackages;
     }
 
 
@@ -90,11 +93,19 @@ public class Car {
         this.enginePower = enginePower;
     }
 
-    public List<String> getListCarTotalEquipment() {
-        return listCarTotalEquipment;
+    public List<String> getListEquipment() {
+        return listEquipment;
     }
 
-    public void setListCarTotalEquipment(List<String> listCarTotalEquipment) {
-        this.listCarTotalEquipment = listCarTotalEquipment;
+    public void setListEquipment(List<String> listEquipment) {
+        this.listEquipment = listEquipment;
+    }
+
+    public List<String> getListEquipmentPackages() {
+        return listEquipmentPackages;
+    }
+
+    public void setListEquipmentPackages(List<String> listEquipmentPackages) {
+        this.listEquipmentPackages = listEquipmentPackages;
     }
 }

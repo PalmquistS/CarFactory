@@ -1,9 +1,7 @@
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -17,12 +15,13 @@ public class CarFactoryTest {
     void setUp() {
         VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator = new VehicleRegistrationNumberGenerator(List.of("ABC123"));
         carFactory = new CarFactory(vehicleRegistrationNumberGenerator, "Saab");
+        //   carFactory.addModel("900", "Bensin", 90, 4,"Plus", List.of("Rattvärme", "Stolsvärme", "Krockkudde"));
         carFactory.addModel("900", "Bensin", 90, 4, List.of("Rattvärme", "Stolsvärme", "Krockkudde"));
     }
 
     @Test
     void test_create_car_success() throws MissingModelException {
-        Car car = carFactory.createNewCar("900", "red", List.of(""));
+        Car car = carFactory.createNewCar("900", "red", List.of(), List.of(""));
 
         assertNotNull(car);
         assertEquals("red", car.getColor());
@@ -33,7 +32,7 @@ public class CarFactoryTest {
 
     @Test
     void test_create_car_model_success() throws MissingModelException {
-        Car car = carFactory.createNewCar("900", "red", List.of(""));
+        Car car = carFactory.createNewCar("900", "red", List.of(), List.of(""));
 
         assertEquals("900", car.getModel());
         assertEquals("Bensin", car.getEngineType());
@@ -67,7 +66,7 @@ public class CarFactoryTest {
 
     @Test
     void test_create_many_car_model_success() throws MissingModelException {
-        Car car = carFactory.createNewCar("900", "red", List.of(""));
+        Car car = carFactory.createNewCar("900", "red", List.of(), List.of(""));
         assertNotNull(car);
         assertEquals("900", car.getModel());
         assertEquals("red", car.getColor());
@@ -78,27 +77,33 @@ public class CarFactoryTest {
 
     @Test
     void test_add_list_of_equipment_to_the_car_success() throws MissingModelException {
-        Car car = carFactory.createNewCar("900", "red", List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak"));
+        Car car = carFactory.createNewCar("900", "red", List.of(), List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak"));
 
         assertNotNull(car);
         // assertThat(List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak, Rattvärme, Stolsvärme, Krockkudde"), Matchers.containsInAnyOrder(car.getListCarTotalEquipment()));
-        assertEquals(List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak", "Rattvärme", "Stolsvärme", "Krockkudde"), car.getListCarTotalEquipment());
+        assertEquals(List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak", "Rattvärme", "Stolsvärme", "Krockkudde"), car.getListEquipment());
     }
 
     @Test
     void test_check_model_specific_equipment_success() throws MissingModelException {
-        Car car = carFactory.createNewCar("900", "red", List.of());
+        Car car = carFactory.createNewCar("900", "red", List.of(), List.of());
 
         assertNotNull(car);
-        assertEquals(List.of("Rattvärme", "Stolsvärme", "Krockkudde"), car.getListCarTotalEquipment());
+        assertEquals(List.of("Rattvärme", "Stolsvärme", "Krockkudde"), car.getListEquipment());
     }
 
     @Test
     void test_create_car_fail_because_missing_model() {
-        MissingModelException missingModelException = assertThrows(MissingModelException.class, () -> carFactory.createNewCar("901", "red", List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak")));
+        MissingModelException missingModelException = assertThrows(MissingModelException.class, () -> carFactory.createNewCar("901", "red", List.of(), List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak")));
 
         assertEquals("901", missingModelException.getMessage());
 
 
+    }
+
+    @Test
+    void test_add_equipment_package_to_model_success() throws MissingModelException {
+        Car car = carFactory.createNewCar("900", "red", List.of("Plus"), List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak"));
+assertEquals(List.of("Plus"),car.getListEquipmentPackages());
     }
 }

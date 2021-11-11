@@ -1,4 +1,3 @@
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,7 @@ public class CarFactory {
     /*public Car createNewCar(String model, String color, String engineType, Integer numberOfPassengers, Integer enginePower) {
         return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model, color, engineType, numberOfPassengers, enginePower);
     }*/
-    public Car createNewCar(String modelAsText, String color, List<String> listOfExtraEquipment) throws MissingModelException {
+    public Car createNewCar(String modelAsText, String color, List<String> listOfPackages, List<String> listOfExtraEquipment) throws MissingModelException {
         Model model = models.get(modelAsText);
         if (model == null) {
             throw new MissingModelException(modelAsText);
@@ -34,6 +33,7 @@ public class CarFactory {
                 model.getEngineType(),
                 model.getNumberOfPassenger(),
                 model.getEnginePower(),
+                listOfPackages,
                 listCarTotalEquipment);
     }
 
@@ -45,8 +45,8 @@ public class CarFactory {
         this.brand = brand;
     }
 
-    public void addModel(String model, String engineType, int enginePower, int numberOfPassenger, List<String> listOfStandardEquipment) {
-        models.put(model, new Model(model, engineType, enginePower, numberOfPassenger, listOfStandardEquipment));
+ public void addModel(String model, String engineType, int enginePower, int numberOfPassenger,List<String> listOfStandardEquipment) {
+        models.put(model, new Model(model, engineType, enginePower, numberOfPassenger,  listOfStandardEquipment));
     }
 
     public static class Model {

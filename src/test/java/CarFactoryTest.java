@@ -103,9 +103,21 @@ public class CarFactoryTest {
 
     @Test
     void test_add_equipment_package_to_model_success() throws MissingModelException, MissingPackageException {
-        carFactory.addPackage("Plus",List.of("Elmanövrerade backspeglar","Taklucka"));
+        carFactory.addPackage("Plus", List.of("Elmanövrerade backspeglar", "Taklucka"), null);
         Car car = carFactory.createNewCar("900", "red", List.of("Plus"), List.of());
         assertEquals(List.of("Plus"), car.getListEquipmentPackages());
-        assertEquals(List.of("Rattvärme", "Stolsvärme", "Krockkudde","Elmanövrerade backspeglar","Taklucka"), car.getListEquipment());
+        assertEquals(List.of("Rattvärme", "Stolsvärme", "Krockkudde", "Elmanövrerade backspeglar", "Taklucka"), car.getListEquipment());
+    }
+
+    @Test
+    void test_create_car_with_inherit_equipment_package_success() throws MissingModelException, MissingPackageException {
+        carFactory.addPackage("Plus", List.of("Elmanövrerade backspeglar", "Taklucka"), null);
+        carFactory.addPackage("Sport", List.of("Sportratt", "Sport förarstol", "Kjolpaket", "Sport gaspedal och broms"), "Plus");
+        carFactory.addPackage("Business", List.of("Bluetooth integration", "Krock Varnare", "Autobroms", "Backvarnare", "Backkamera"), "Plus");
+
+        Car car = carFactory.createNewCar("900", "red", List.of("Sport"), List.of());
+
+        assertEquals(List.of("Sport"), car.getListEquipmentPackages());
+        assertEquals(List.of("Rattvärme", "Stolsvärme", "Krockkudde", "Sportratt", "Sport förarstol", "Kjolpaket", "Sport gaspedal och broms", "Elmanövrerade backspeglar", "Taklucka"), car.getListEquipment());
     }
 }

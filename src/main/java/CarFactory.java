@@ -7,6 +7,7 @@ public class CarFactory {
     private VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator;
     private String brand;
     private Map<String, Model> models = new HashMap<>();
+    private Map<String, CarPackage> carPackages = new HashMap<>();
 
 
     public CarFactory(VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator, String brand) {
@@ -17,15 +18,14 @@ public class CarFactory {
     /*public Car createNewCar(String model, String color, String engineType, Integer numberOfPassengers, Integer enginePower) {
         return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model, color, engineType, numberOfPassengers, enginePower);
     }*/
-    public Car createNewCar(String modelAsText, String color, List<String> listOfPackages, List<String> listOfExtraEquipment) throws MissingModelException {
+    public Car createNewCar(String modelAsText, String color, List<String> listOfPackages, List<String> listOfExtraEquipment) throws MissingModelException, MissingPackageException {
         Model model = models.get(modelAsText);
         if (model == null) {
             throw new MissingModelException(modelAsText);
         }
         List<String> listCarTotalEquipment = new ArrayList<>(listOfExtraEquipment);
         listCarTotalEquipment.addAll(model.getListOfStandardEquipment());
-
-
+        appendPackageEquipment(modelAsText, listOfPackages, listCarTotalEquipment);
         return new Car(getBrand(),
                 vehicleRegistrationNumberGenerator.getNextRegNo(),
                 model.getModel(),
@@ -35,6 +35,16 @@ public class CarFactory {
                 model.getEnginePower(),
                 listOfPackages,
                 listCarTotalEquipment);
+    }
+
+    private void appendPackageEquipment(String modelAsText, List<String> listOfPackages, List<String> listCarTotalEquipment) throws MissingPackageException {
+        for (String carPackageName : listOfPackages) {
+            CarPackage carPackage = carPackages.get(carPackageName);
+            if (carPackage == null){
+                throw new MissingPackageException(carPackageName);
+            }
+            listCarTotalEquipment.addAll(carPackage.getEquipment());
+        }
     }
 
     public String getBrand() {
@@ -47,6 +57,10 @@ public class CarFactory {
 
  public void addModel(String model, String engineType, int enginePower, int numberOfPassenger,List<String> listOfStandardEquipment) {
         models.put(model, new Model(model, engineType, enginePower, numberOfPassenger,  listOfStandardEquipment));
+    }
+
+    public void addPackage(String packageName, List<String> equipment) {
+        carPackages.put(packageName, new CarPackage(packageName,equipment));
     }
 
     public static class Model {
@@ -85,6 +99,25 @@ public class CarFactory {
 
         public List<String> getListOfStandardEquipment() {
             return listOfStandardEquipment;
+        }
+    }
+
+    private static class CarPackage {
+        private String packageName;
+        private List<String> equipment;
+
+        public CarPackage(String packageName, List<String> equipment) {
+
+            this.packageName = packageName;
+            this.equipment = equipment;
+        }
+
+        public String getPackageName() {
+            return packageName;
+        }
+
+        public List<String> getEquipment() {
+            return equipment;
         }
     }
 }

@@ -1,3 +1,5 @@
+import java.io.Console;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,10 @@ public class CarFactory {
         if (model == null) {
             throw new RuntimeException("Unknown model " + model);
         }
+        List<String> listCarTotalEquipment = new ArrayList<>(listOfExtraEquipment);
+        listCarTotalEquipment.addAll(model.getListOfStandardEquipment());
+
+
         return new Car(getBrand(),
                 vehicleRegistrationNumberGenerator.getNextRegNo(),
                 model.getModel(),
@@ -28,8 +34,7 @@ public class CarFactory {
                 model.getEngineType(),
                 model.getNumberOfPassenger(),
                 model.getEnginePower(),
-                model.getListOfStandardEquipment(),
-                listOfExtraEquipment);
+                listCarTotalEquipment);
     }
 
     public String getBrand() {
@@ -49,7 +54,7 @@ public class CarFactory {
         String engineType;
         int enginePower;
         int numberOfPassenger;
-      List<String> listOfStandardEquipment;
+        List<String> listOfStandardEquipment;
 
         public Model(String model, String engineType, int enginePower, int numberOfPassenger, List<String> listOfStandardEquipment) {
             this.model = model;

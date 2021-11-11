@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Car {
@@ -8,8 +9,8 @@ public class Car {
     private String engineType;
     private int numberOfPassengers;
     private int enginePower;
-    private List<String> listOfStandardEquipment;
-    private List<String> listOfExtraEquipment;
+    private List<String> listCarTotalEquipment;
+
 
     public Car(String brand,
                String regNo,
@@ -18,8 +19,8 @@ public class Car {
                String engineType,
                int numberOfPassengers,
                int enginePower,
-              List<String> listOfStandardEquipment,
-              List<String> listOfExtraEquipment) {
+               List<String> listCarTotalEquipment) {
+
 
         this.brand = brand;
         this.regNo = regNo;
@@ -28,10 +29,10 @@ public class Car {
         this.engineType = engineType;
         this.numberOfPassengers = numberOfPassengers;
         this.enginePower = enginePower;
-        this.listOfStandardEquipment = listOfStandardEquipment;
-        this.listOfExtraEquipment = listOfExtraEquipment;
+        this.listCarTotalEquipment = listCarTotalEquipment;
 
     }
+
 
     public String getBrand() {
         return brand;
@@ -89,19 +90,11 @@ public class Car {
         this.enginePower = enginePower;
     }
 
-    public List<String> getListOfExtraEquipment() {
-        return listOfExtraEquipment;
+    public List<String> getListCarTotalEquipment() {
+        return listCarTotalEquipment;
     }
 
-    public void setListOfExtraEquipment(List<String> listOfExtraEquipment) {
-        this.listOfExtraEquipment = listOfExtraEquipment;
-    }
-
-    public List<String> getListOfStandardEquipment() {
-        return listOfStandardEquipment;
-    }
-
-    public void setListOfStandardEquipment(List<String> listOfStandardEquipment) {
-        this.listOfStandardEquipment = listOfStandardEquipment;
+    public void setListCarTotalEquipment(List<String> listCarTotalEquipment) {
+        this.listCarTotalEquipment = listCarTotalEquipment;
     }
 }

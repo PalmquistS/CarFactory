@@ -1,12 +1,14 @@
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
+
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CarFactoryTest {
     CarFactory carFactory;
@@ -15,7 +17,7 @@ public class CarFactoryTest {
     void setUp() {
         VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator = new VehicleRegistrationNumberGenerator(List.of("ABC123"));
         carFactory = new CarFactory(vehicleRegistrationNumberGenerator, "Saab");
-        carFactory.addModel("900", "Bensin", 90, 4, List.of("Rattvärme, Stolsvärme, Krockkudde"));
+        carFactory.addModel("900", "Bensin", 90, 4, List.of("Rattvärme", "Stolsvärme", "Krockkudde"));
     }
 
     @Test
@@ -76,17 +78,25 @@ public class CarFactoryTest {
 
     @Test
     void test_add_list_of_equipment_to_the_car_success() {
-        Car car = carFactory.createNewCar("900", "red", List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak"));
+        Car car = carFactory.createNewCar("900", "red", List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak"));
 
         assertNotNull(car);
-        assertEquals(List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak"), car.getListOfExtraEquipment());
+       // assertThat(List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak, Rattvärme, Stolsvärme, Krockkudde"), Matchers.containsInAnyOrder(car.getListCarTotalEquipment()));
+assertEquals(List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak", "Rattvärme", "Stolsvärme", "Krockkudde"),car.getListCarTotalEquipment());
     }
 
     @Test
     void test_check_model_specific_equipment_success() {
-        Car car = carFactory.createNewCar("900", "red", List.of(""));
+        Car car = carFactory.createNewCar("900", "red", List.of());
 
         assertNotNull(car);
-        assertEquals(List.of("Rattvärme, Stolsvärme, Krockkudde"), car.getListOfStandardEquipment());
+        assertEquals(List.of("Rattvärme", "Stolsvärme", "Krockkudde"), car.getListCarTotalEquipment());
+    }
+
+    @Test
+    void test_check_car_all_equipment_success() {
+        Car car = carFactory.createNewCar("900", "red", List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak"));
+
+        assertNotNull(car);
     }
 }

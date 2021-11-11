@@ -104,6 +104,6 @@ public class CarFactoryTest {
     @Test
     void test_add_equipment_package_to_model_success() throws MissingModelException {
         Car car = carFactory.createNewCar("900", "red", List.of("Plus"), List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak"));
-assertEquals(List.of("Plus"),car.getListEquipmentPackages());
+        assertEquals(List.of("Plus"), car.getListEquipmentPackages());
     }
 }

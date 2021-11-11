@@ -21,7 +21,7 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_create_car_success() {
+    void test_create_car_success() throws MissingModelException {
         Car car = carFactory.createNewCar("900", "red", List.of(""));
 
         assertNotNull(car);
@@ -32,7 +32,7 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_create_car_model_success() {
+    void test_create_car_model_success() throws MissingModelException {
         Car car = carFactory.createNewCar("900", "red", List.of(""));
 
         assertEquals("900", car.getModel());
@@ -66,7 +66,7 @@ public class CarFactoryTest {
     }*/
 
     @Test
-    void test_create_many_car_model_success() {
+    void test_create_many_car_model_success() throws MissingModelException {
         Car car = carFactory.createNewCar("900", "red", List.of(""));
         assertNotNull(car);
         assertEquals("900", car.getModel());
@@ -77,16 +77,16 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_add_list_of_equipment_to_the_car_success() {
+    void test_add_list_of_equipment_to_the_car_success() throws MissingModelException {
         Car car = carFactory.createNewCar("900", "red", List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak"));
 
         assertNotNull(car);
-       // assertThat(List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak, Rattvärme, Stolsvärme, Krockkudde"), Matchers.containsInAnyOrder(car.getListCarTotalEquipment()));
-assertEquals(List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak", "Rattvärme", "Stolsvärme", "Krockkudde"),car.getListCarTotalEquipment());
+        // assertThat(List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak, Rattvärme, Stolsvärme, Krockkudde"), Matchers.containsInAnyOrder(car.getListCarTotalEquipment()));
+        assertEquals(List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak", "Rattvärme", "Stolsvärme", "Krockkudde"), car.getListCarTotalEquipment());
     }
 
     @Test
-    void test_check_model_specific_equipment_success() {
+    void test_check_model_specific_equipment_success() throws MissingModelException {
         Car car = carFactory.createNewCar("900", "red", List.of());
 
         assertNotNull(car);
@@ -94,9 +94,11 @@ assertEquals(List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak", "
     }
 
     @Test
-    void test_check_car_all_equipment_success() {
-        Car car = carFactory.createNewCar("900", "red", List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak"));
+    void test_create_car_fail_because_missing_model() {
+        MissingModelException missingModelException = assertThrows(MissingModelException.class, () -> carFactory.createNewCar("901", "red", List.of("Xeonljus, Lättmetallfälgar 24\", Stolsvärme bak")));
 
-        assertNotNull(car);
+        assertEquals("901", missingModelException.getMessage());
+
+
     }
 }

@@ -18,10 +18,10 @@ public class CarFactory {
     /*public Car createNewCar(String model, String color, String engineType, Integer numberOfPassengers, Integer enginePower) {
         return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model, color, engineType, numberOfPassengers, enginePower);
     }*/
-    public Car createNewCar(String modelAsText, String color, List<String> listOfExtraEquipment) {
+    public Car createNewCar(String modelAsText, String color, List<String> listOfExtraEquipment) throws MissingModelException {
         Model model = models.get(modelAsText);
         if (model == null) {
-            throw new RuntimeException("Unknown model " + model);
+            throw new MissingModelException(modelAsText);
         }
         List<String> listCarTotalEquipment = new ArrayList<>(listOfExtraEquipment);
         listCarTotalEquipment.addAll(model.getListOfStandardEquipment());

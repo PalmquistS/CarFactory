@@ -1,14 +1,11 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CarFactory {
     private VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator;
     private String brand;
     private Map<String, Model> models = new HashMap<>();
     private Map<String, CarPackage> carPackages = new HashMap<>();
-    private Map<String, PossiblePackagesOnCarModel> possiblePackagesOnCarModel = new HashMap<>();
+   // private Map<String, PossiblePackagesOnCarModel> possiblePackagesOnCarModel = new HashMap<>();
 
 
     public CarFactory(VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator, String brand) {
@@ -19,17 +16,21 @@ public class CarFactory {
     /*public Car createNewCar(String model, String color, String engineType, Integer numberOfPassengers, Integer enginePower) {
         return new Car(getBrand(), vehicleRegistrationNumberGenerator.getNextRegNo(), model, color, engineType, numberOfPassengers, enginePower);
     }*/
-    public Car createNewCar(String modelAsText, String color, List<String> listOfPackages, List<String> listOfExtraEquipment) throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
+    public Car createNewCar(String modelAsText, String color, List<String> listOfPackages, List<String> listOfExtraEquipment) throws MissingModelException, MissingPackageException, IllegalModelAndPackageCombinationException, IllegalCombinationOfEquipmentException {
         Model model = models.get(modelAsText);
         if (model == null) {
             throw new MissingModelException(modelAsText);
         }
         if (!listOfPackages.stream().allMatch(packageName -> model.getCompatiblePackages().contains((packageName)))) {
-            throw new IlligalModelAndPackageCombinationException(String.join(",", listOfPackages));
+            throw new IllegalModelAndPackageCombinationException(String.join(",", listOfPackages));
         }
         List<String> listCarTotalEquipment = new ArrayList<>(listOfExtraEquipment);
         listCarTotalEquipment.addAll(model.getListOfStandardEquipment());
         appendPackageEquipment(listOfPackages, listCarTotalEquipment);
+        Set<String> equipmentDuplicates = findDuplicates(listCarTotalEquipment);
+        if(!equipmentDuplicates.isEmpty()){
+            throw new IllegalCombinationOfEquipmentException(String.join(",",equipmentDuplicates));
+        }
         return new Car(getBrand(),
                 vehicleRegistrationNumberGenerator.getNextRegNo(),
                 model.getModel(),
@@ -71,9 +72,20 @@ public class CarFactory {
         carPackages.put(packageName, new CarPackage(packageName, equipment, inheritFromPackageName));
     }
 
-    public void addPossiblePackagesOnCarModel(String modelName, List<String> listOfPossiblePackagesNames) {
-        possiblePackagesOnCarModel.put(modelName, new PossiblePackagesOnCarModel(modelName, listOfPossiblePackagesNames));
+    private static Set<String> findDuplicates(List<String> listContainingDuplicates){
+        final Set<String> setToReturn = new HashSet<>();
+        final Set<String> set1 = new HashSet<>();
+
+        for (String yourInt: listContainingDuplicates){
+            if(!set1.add(yourInt)){
+                setToReturn.add(yourInt);
+            }
+        }
+        return setToReturn;
     }
+    /*public void addPossiblePackagesOnCarModel(String modelName, List<String> listOfPossiblePackagesNames) {
+        possiblePackagesOnCarModel.put(modelName, new PossiblePackagesOnCarModel(modelName, listOfPossiblePackagesNames));
+    }*/
 
     public static class Model {
         String model;
@@ -146,7 +158,7 @@ public class CarFactory {
         }
     }
 
-    private class PossiblePackagesOnCarModel {
+   /* private class PossiblePackagesOnCarModel {
         private String modelName;
         private List<String> listOfPossiblePackagesNames;
 
@@ -162,5 +174,5 @@ public class CarFactory {
         public List<String> getListOfPossiblePackagesNames() {
             return listOfPossiblePackagesNames;
         }
-    }
+    }*/
 }

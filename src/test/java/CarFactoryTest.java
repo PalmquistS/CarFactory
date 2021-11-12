@@ -16,11 +16,16 @@ public class CarFactoryTest {
         VehicleRegistrationNumberGenerator vehicleRegistrationNumberGenerator = new VehicleRegistrationNumberGenerator(List.of("ABC123"));
         carFactory = new CarFactory(vehicleRegistrationNumberGenerator, "Saab");
         //   carFactory.addModel("900", "Bensin", 90, 4,"Plus", List.of("Rattvärme", "Stolsvärme", "Krockkudde"));
-        carFactory.addModel("900", "Bensin", 90, 4, List.of("Rattvärme", "Stolsvärme", "Krockkudde"));
+        carFactory.addModel("900", "Bensin", 90, 4, List.of("Rattvärme", "Stolsvärme", "Krockkudde"), List.of("Plus"));
+        carFactory.addModel("900 Turbo", "Bensin/Turbo", 150, 4, List.of("Rattvärme", "Stolsvärme", "Krockkudde"), List.of("Plus","Sport"));
+        carFactory.addModel("93", "Bensin", 110, 4, List.of("Rattvärme", "Stolsvärme", "Krockkudde"), List.of("Plus","Business"));
+        carFactory.addModel("93 aero", "Bensin/Turbo", 190, 4, List.of("Rattvärme", "Stolsvärme", "Krockkudde"), List.of("Plus","Business"));
+        carFactory.addModel("9-7X", "Diesel/Turbo", 170, 6, List.of("Rattvärme", "Stolsvärme", "Krockkudde"), List.of("Plus","Business"));
+
     }
 
     @Test
-    void test_create_car_success() throws MissingModelException, MissingPackageException {
+    void test_create_car_success() throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
         Car car = carFactory.createNewCar("900", "red", List.of(), List.of(""));
 
         assertNotNull(car);
@@ -31,7 +36,7 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_create_car_model_success() throws MissingModelException, MissingPackageException {
+    void test_create_car_model_success() throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
         Car car = carFactory.createNewCar("900", "red", List.of(), List.of(""));
 
         assertEquals("900", car.getModel());
@@ -65,7 +70,7 @@ public class CarFactoryTest {
     }*/
 
     @Test
-    void test_create_many_car_model_success() throws MissingModelException, MissingPackageException {
+    void test_create_many_car_model_success() throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
         Car car = carFactory.createNewCar("900", "red", List.of(), List.of(""));
         assertNotNull(car);
         assertEquals("900", car.getModel());
@@ -76,7 +81,7 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_add_list_of_equipment_to_the_car_success() throws MissingModelException, MissingPackageException {
+    void test_add_list_of_equipment_to_the_car_success() throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
         Car car = carFactory.createNewCar("900", "red", List.of(), List.of("Xeonljus", "Lättmetallfälgar 24\"", "Stolsvärme bak"));
 
         assertNotNull(car);
@@ -85,7 +90,7 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_check_model_specific_equipment_success() throws MissingModelException, MissingPackageException {
+    void test_check_model_specific_equipment_success() throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
         Car car = carFactory.createNewCar("900", "red", List.of(), List.of());
 
         assertNotNull(car);
@@ -102,7 +107,7 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_add_equipment_package_to_model_success() throws MissingModelException, MissingPackageException {
+    void test_add_equipment_package_to_model_success() throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
         carFactory.addPackage("Plus", List.of("Elmanövrerade backspeglar", "Taklucka"), null);
         Car car = carFactory.createNewCar("900", "red", List.of("Plus"), List.of());
         assertEquals(List.of("Plus"), car.getListEquipmentPackages());
@@ -110,14 +115,28 @@ public class CarFactoryTest {
     }
 
     @Test
-    void test_create_car_with_inherit_equipment_package_success() throws MissingModelException, MissingPackageException {
+    void test_create_car_with_inherit_equipment_package_success() throws MissingModelException, MissingPackageException, IlligalModelAndPackageCombinationException {
         carFactory.addPackage("Plus", List.of("Elmanövrerade backspeglar", "Taklucka"), null);
         carFactory.addPackage("Sport", List.of("Sportratt", "Sport förarstol", "Kjolpaket", "Sport gaspedal och broms"), "Plus");
         carFactory.addPackage("Business", List.of("Bluetooth integration", "Krock Varnare", "Autobroms", "Backvarnare", "Backkamera"), "Plus");
 
-        Car car = carFactory.createNewCar("900", "red", List.of("Sport"), List.of());
+        Car car = carFactory.createNewCar("900 Turbo", "red", List.of("Sport"), List.of());
 
         assertEquals(List.of("Sport"), car.getListEquipmentPackages());
         assertEquals(List.of("Rattvärme", "Stolsvärme", "Krockkudde", "Sportratt", "Sport förarstol", "Kjolpaket", "Sport gaspedal och broms", "Elmanövrerade backspeglar", "Taklucka"), car.getListEquipment());
+    }
+
+    @Test
+    void test_create_car_fail_because_of_wrong_package() throws MissingModelException, MissingPackageException {
+        carFactory.addPackage("Plus", List.of("Elmanövrerade backspeglar", "Taklucka"), null);
+        carFactory.addPackage("Sport", List.of("Sportratt", "Sport förarstol", "Kjolpaket", "Sport gaspedal och broms"), "Plus");
+        carFactory.addPackage("Business", List.of("Bluetooth integration", "Krock Varnare", "Autobroms", "Backvarnare", "Backkamera"), "Plus");
+        carFactory.addPossiblePackagesOnCarModel("900", List.of("Sport"));
+
+
+        IlligalModelAndPackageCombinationException illigalModelAndPackageCombinationException = assertThrows(IlligalModelAndPackageCombinationException.class, () ->
+                carFactory.createNewCar("900", "red", List.of("Sport"), List.of()));
+
+        assertEquals("Sport", illigalModelAndPackageCombinationException.getMessage());
     }
 }
